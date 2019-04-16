@@ -3,12 +3,12 @@
 steps:
 #ensure the tests are running
 - name: 'gcr.io/cloud-builders/mvn'
-  args: ['verify ']
+  args: ['verify']
   dir: 'app'
 
 #package the application
 - name: 'gcr.io/cloud-builders/mvn'
-  args: ['package ']
+  args: ['package']
   dir: 'app'
 
 # create a docker container for the application  
