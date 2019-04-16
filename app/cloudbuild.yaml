@@ -1,6 +1,15 @@
+#Build the application and the package it a docker iamge
+
 steps:
+#build the application
 - name: 'gcr.io/cloud-builders/mvn'
   args: ['clean verify package']
+  dir: 'app'
+
+# create a docker container for the application  
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '--tag=gcr.io/$PROJECT_ID/fooapp', '.']
+  dir: 'app'
+
+#saves it in the google registry
 images: ['gcr.io/$PROJECT_ID/fooapp']
