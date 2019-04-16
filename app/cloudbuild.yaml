@@ -1,13 +1,14 @@
 #Build the application and the package it a docker iamge
 
 steps:
+
 #ensure the tests are running
-- name: 'gcr.io/cloud-builders/mvn'
+- name: 'gcr.io/cloud-builders/mvn:3.5.0-jdk-8'
   args: ['verify']
   dir: 'app'
 
 #package the application
-- name: 'gcr.io/cloud-builders/mvn'
+- name: 'gcr.io/cloud-builders/mvn:3.5.0-jdk-8'
   args: ['package']
   dir: 'app'
 
