@@ -1,4 +1,4 @@
-# TDC Sample Search
+# The great echo app, called fooapp
 
 ### Code template
 
