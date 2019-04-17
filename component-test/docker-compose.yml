@@ -6,7 +6,7 @@ services:
   # FooApp Application
   application:
     #cannot be build for it to work
-    image: "gcr.io/${PROJECT_ID}/fooapp:latest"
+    image: "gcr.io/${PROJECT_ID}/fooapp:${SHORT_SHA}"
     #application name is very importante for the test
     container_name: application
     networks:

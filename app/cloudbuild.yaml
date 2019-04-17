@@ -8,7 +8,7 @@ steps:
 
 #1 create a docker container for the application
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '--tag=gcr.io/$PROJECT_ID/fooapp:latest', '.']
+  args: ['build', '--tag=gcr.io/$PROJECT_ID/fooapp:$SHORT_SHA', '.']
   dir: 'app'
 
 #2 run the testing environment
@@ -17,6 +17,7 @@ steps:
   dir: 'component-test'
   env:
     - 'PROJECT_ID=$PROJECT_ID'
+    - 'SHORT_SHA=$SHORT_SHA'
 
 #3 wait for the application to start
 - name: 'gcr.io/cloud-builders/gcloud'
@@ -37,7 +38,7 @@ steps:
 
 #6 saves it in the google registry
 - name: 'gcr.io/cloud-builders/docker'
-  args: ["push", "gcr.io/$PROJECT_ID/fooapp:latest"]
+  args: ["push", "gcr.io/$PROJECT_ID/fooapp:$SHORT_SHA"]
 
 #7 deploy the application to the environment
 - name: 'gcr.io/cloud-builders/kubectl'
@@ -46,7 +47,7 @@ steps:
     - 'image'
     - 'deployment'
     - 'fooapp-dev'
-    - 'fooapp-dev=gcr.io/$PROJECT_ID/fooapp:latest'
+    - 'fooapp-dev=gcr.io/$PROJECT_ID/fooapp:$SHORT_SHA'
   env:
     - 'CLOUDSDK_COMPUTE_ZONE=us-west1-a'
     - 'CLOUDSDK_CONTAINER_CLUSTER=fooclusterdev'
