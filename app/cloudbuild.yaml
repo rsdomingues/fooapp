@@ -6,37 +6,50 @@ steps:
   args: ['verify', 'package', '-q']
   dir: 'app'
 
-#2 create a docker container for the application
+#1 create a docker container for the application
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '--tag=gcr.io/$PROJECT_ID/fooapp:latest', '.']
   dir: 'app'
 
-#3 run the testing environment
+#2 run the testing environment
 - name: 'docker/compose:1.15.0'
   args: ['up', '-d']
   dir: 'component-test'
   env:
     - 'PROJECT_ID=$PROJECT_ID'
 
-#4 wait for the application to start
+#3 wait for the application to start
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: '/bin/bash'
   args: ['-c', 'sleep 50']
   dir: 'component-test'
 
-#5 check if the application has started
+#4 check if the application has started
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: '/bin/bash'
   args: ['-c', './waitApp.sh']
   dir: 'component-test'
 
-#6 run the business and performance tests
+#5 run the business and performance tests
 - name: 'gcr.io/cloud-builders/mvn:3.5.0-jdk-8'
-  args: ['verify', 'gatling:execute']
+  args: ['verify', 'gatling:execute', '-q']
   dir: 'component-test'
 
-#saves it in the google registry
-images: ['gcr.io/$PROJECT_ID/fooapp']
+#6 saves it in the google registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ["push", "gcr.io/$PROJECT_ID/fooapp:latest"]
+
+#7 deploy the application to the environment
+- name: 'gcr.io/cloud-builders/kubectl'
+  args:
+    - 'set'
+    - 'image'
+    - 'deployment'
+    - 'fooapp-dev'
+    - 'fooapp-dev=gcr.io/$PROJECT_ID/fooapp:latest'
+  env:
+    - 'CLOUDSDK_COMPUTE_ZONE=us-west1-a'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=fooclusterdev'
 
 #For easy filter
 tags:
