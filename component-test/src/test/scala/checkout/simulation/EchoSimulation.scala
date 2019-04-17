@@ -15,7 +15,7 @@ class EchoSimulation extends BaseSimulation {
       constantUsersPerSec(noOfUsersPerSec) during (durationTime)
     )
   ).assertions(
-    global.responseTime.mean.lte(20),
+    global.responseTime.mean.lte(500),
     forAll.failedRequests.percent.is(0.0)
   ).protocols(Protocol.Application);
 
