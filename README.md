@@ -15,7 +15,7 @@ We are using [Google Java Style](https://google.github.io/styleguide/javaguide.h
 - [Cucumber](https://plugins.jetbrains.com/plugin/7212-cucumber-for-java)
 
 
-### Start application with spring cloud config
+### Start application
 ```
 cd app
 mvn spring-boot:run
@@ -38,6 +38,9 @@ mvn clean verify
 
 ### Run Performance test
 ```
+cd app
+mvn spring-boot:run &
+
 cd component-test
 mvn clean package -DskipTests gatling:execute 
 ```
