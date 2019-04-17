@@ -38,5 +38,6 @@ steps:
 #saves it in the google registry
 images: ['gcr.io/$PROJECT_ID/fooapp']
 
+#For easy filter
 tags:
   - "CI"
